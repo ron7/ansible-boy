@@ -1,0 +1,17 @@
+drop table if exists users;
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `users` VALUES (1,'Admin','admin@xron.net',1,1,'admin','$2y$12$ox9RaZpghLbp73XOQ3MK6.TP5/isQtJHdd2nGt7JC0HNqQrMsgqei','2020-10-03 01:29:43');
