@@ -11,6 +11,29 @@ if ($handle = opendir($folder)) {
   }
   closedir($handle);
 }
+
+
+
+function humanUptimeFromSeconds($sec) {
+        /* $str   = @file_get_contents('/proc/uptime'); */
+        /* $sec   = floatval($str); */
+        $secs  = $sec % 60;
+        $sec   = (int)($sec / 60);
+        $mins  = $sec % 60;
+        $sec   = (int)($sec / 60);
+        $hours = $sec % 24;
+        $sec   = (int)($sec / 24);
+        $days  = $sec;
+
+        $ut = array(
+            "days"  => $days,
+            "hours" => $hours,
+            "mins"  => $mins,
+            "secs"  => $secs
+        );
+return "{$ut['days']}d {$ut['hours']}h {$ut['mins']}m";
+    }
+
 /* print_r($aFiles); */
 if(!empty($aFiles)){
   foreach($aFiles as $file){
@@ -31,9 +54,9 @@ if(!empty($aFiles)){
         /* $uuid = $firstObjVal[0]; */
       }
 
-      $allIpsv4 = json_encode($af->ansible_facts->ansible_all_ipv4_addresses);
-      $allIpsv6 = json_encode($af->ansible_facts->ansible_all_ipv6_addresses);
-      $dns_ns = json_encode($af->ansible_facts->ansible_dns->nameservers);
+      $allIpsv4 = implode(',',$af->ansible_facts->ansible_all_ipv4_addresses);
+      $allIpsv6 = implode(',',$af->ansible_facts->ansible_all_ipv6_addresses);
+      $dns_ns = implode(',',$af->ansible_facts->ansible_dns->nameservers);
       $sys_cap = implode(',',$af->ansible_facts->ansible_system_capabilities);
 
       $devices = array();
@@ -51,15 +74,14 @@ if(!empty($aFiles)){
       $lvm = json_encode($af->ansible_facts->ansible_lvm);
       $full = json_encode($af->ansible_facts);
 
-      $boot_info = json_encode($af->ansible_facts->ansible_cmdline);
-      $selinux_info = json_encode($af->ansible_facts->ansible_selinux);
-      $main_ip = json_encode($af->ansible_facts->ansible_default_ipv4);
       $system_capabilities_enforced = null;
       if( $af->ansible_facts->ansible_system_capabilities_enforced == 'True'){
         $system_capabilities_enforced = 1;
       }elseif( $af->ansible_facts->ansible_system_capabilities_enforced == 'False'){
         $system_capabilities_enforced = 0;
       }
+$uptime_human = humanUptimeFromSeconds($af->ansible_facts->ansible_uptime_seconds);
+$epoch_human = date('r',$af->ansible_facts->ansible_date_time->epoch);
 
       $q = "insert into servers (
         id,
@@ -88,16 +110,24 @@ if(!empty($aFiles)){
         cpu_threads_per_core,
         cpu_vcpus,
         system_capabilities_enforced,
-        epoch,
+        epoch_time,
         bios_ver,
         bios_date,
-        boot_info,
-        selinux_info,
+        boot_image,
+        selinux_status,
+        selinux_mode,
+        selinux_type,
         service_mgr,
         python_ver,
         all_ipsv4,
         all_ipsv6,
-        main_ip,
+        main_ip_address,
+        main_ip_netmask,
+        main_ip_gateway,
+        main_ip_interface,
+        main_ip_mac,
+        main_ip_network,
+        main_ip_type,
         domain,
         dns_ns,
         sys_cap,
@@ -127,7 +157,7 @@ full
   '{$af->ansible_facts->ansible_system_vendor}',
   '{$af->ansible_facts->ansible_virtualization_type}',
   '{$af->ansible_facts->ansible_virtualization_role}',
-  '{$af->ansible_facts->ansible_uptime_seconds}',
+  '$uptime_human',
   '{$af->ansible_facts->ansible_fqdn}',
   '{$af->ansible_facts->ansible_hostname}',
   '{$af->ansible_facts->ansible_nodename}',
@@ -138,16 +168,24 @@ full
   '{$af->ansible_facts->ansible_processor_threads_per_core}',
   '{$af->ansible_facts->ansible_processor_vcpus}',
   '{$system_capabilities_enforced}',
-  '{$af->ansible_facts->ansible_date_time->epoch}',
+  '$epoch_human',
   '{$af->ansible_facts->ansible_bios_version}',
   '{$af->ansible_facts->ansible_bios_date}',
-  '$boot_info',
-  '$selinux_info',
+  '{$af->ansible_facts->ansible_cmdline->BOOT_IMAGE}',
+  '{$af->ansible_facts->ansible_selinux->status}',
+  '{$af->ansible_facts->ansible_selinux->mode}',
+  '{$af->ansible_facts->ansible_selinux->type}',
   '{$af->ansible_facts->ansible_service_mgr}',
   '{$af->ansible_facts->ansible_python_version}',
   '{$allIpsv4}',
   '{$allIpsv6}',
-  '$main_ip',
+  '{$af->ansible_facts->ansible_default_ipv4->address}',
+  '{$af->ansible_facts->ansible_default_ipv4->netmask}',
+  '{$af->ansible_facts->ansible_default_ipv4->gateway}',
+  '{$af->ansible_facts->ansible_default_ipv4->interface}',
+  '{$af->ansible_facts->ansible_default_ipv4->macaddress}',
+  '{$af->ansible_facts->ansible_default_ipv4->network}',
+  '{$af->ansible_facts->ansible_default_ipv4->type}',
   '{$af->ansible_facts->ansible_domain}',
   '$dns_ns',
   '$sys_cap',
@@ -174,7 +212,7 @@ arch = '{$af->ansible_facts->ansible_architecture}',
 sys_vendor = '{$af->ansible_facts->ansible_system_vendor}',
 virt_type = '{$af->ansible_facts->ansible_virtualization_type}',
 virt_role = '{$af->ansible_facts->ansible_virtualization_role}',
-uptime_sec = '{$af->ansible_facts->ansible_uptime_seconds}',
+uptime_sec = '$uptime_human',
 fqdn = '{$af->ansible_facts->ansible_fqdn}',
 hostname = '{$af->ansible_facts->ansible_hostname}',
 nodename = '{$af->ansible_facts->ansible_nodename}',
@@ -185,16 +223,24 @@ cpu_count = '{$af->ansible_facts->ansible_processor_count}',
 cpu_threads_per_core = '{$af->ansible_facts->ansible_processor_threads_per_core}',
 cpu_vcpus = '{$af->ansible_facts->ansible_processor_vcpus}',
 system_capabilities_enforced = '{$system_capabilities_enforced}',
-epoch = '{$af->ansible_facts->ansible_date_time->epoch}',
+epoch_time = '$epoch_human',
 bios_ver = '{$af->ansible_facts->ansible_bios_version}',
 bios_date = '{$af->ansible_facts->ansible_bios_date}',
-boot_info = '$boot_info',
-selinux_info = '$selinux_info',
+boot_image = '{$af->ansible_facts->ansible_cmdline->BOOT_IMAGE}',
+selinux_status = '{$af->ansible_facts->ansible_selinux->status}',
+selinux_mode = '{$af->ansible_facts->ansible_selinux->mode}',
+selinux_type =  '{$af->ansible_facts->ansible_selinux->type}',
 service_mgr = '{$af->ansible_facts->ansible_service_mgr}',
 python_ver = '{$af->ansible_facts->ansible_python_version}',
 all_ipsv4 = '{$allIpsv4}',
 all_ipsv6 = '{$allIpsv6}',
-main_ip = '$main_ip',
+main_ip_address =  '{$af->ansible_facts->ansible_default_ipv4->address}',
+main_ip_netmask =  '{$af->ansible_facts->ansible_default_ipv4->netmask}',
+main_ip_gateway =  '{$af->ansible_facts->ansible_default_ipv4->gateway}',
+main_ip_interface =  '{$af->ansible_facts->ansible_default_ipv4->interface}',
+main_ip_mac =  '{$af->ansible_facts->ansible_default_ipv4->macaddress}',
+main_ip_network =  '{$af->ansible_facts->ansible_default_ipv4->network}',
+main_ip_type =  '{$af->ansible_facts->ansible_default_ipv4->type}',
 domain = '{$af->ansible_facts->ansible_domain}',
 dns_ns = '$dns_ns',
 sys_cap = '$sys_cap',
@@ -211,7 +257,7 @@ ts = NOW()
 ";
       /* echo $q; */
       mql($q);
-      echo "Inserting: {$uuid} / {$af->ansible_facts->ansible_machine_id} {$af->ansible_facts->ansible_fqdn} ({$af->ansible_facts->ansible_hostname}) = {$af->ansible_facts->ansible_distribution} {$af->ansible_facts->ansible_distribution_release} {$af->ansible_facts->ansible_distribution_version} {$af->ansible_facts->ansible_system_vendor} ({$af->ansible_facts->ansible_virtualization_type}) = {$af->ansible_facts->ansible_default_ipv4->address} \n";
+      echo "Inserting: {$uuid} / {$af->ansible_facts->ansible_fqdn} ({$af->ansible_facts->ansible_hostname}) = {$af->ansible_facts->ansible_distribution} {$af->ansible_facts->ansible_distribution_release} {$af->ansible_facts->ansible_distribution_version} {$af->ansible_facts->ansible_system_vendor} ({$af->ansible_facts->ansible_virtualization_type}) = {$af->ansible_facts->ansible_default_ipv4->address} = {$af->ansible_facts->ansible_selinux->status}\n";
 
 /*
 drop table if exists servers;
@@ -231,7 +277,7 @@ CREATE TABLE `servers` (
 `sys_vendor` VARCHAR(60) NULL ,
 `virt_type` VARCHAR(60) NULL ,
 `virt_role` VARCHAR(60) NULL ,
-`uptime_sec` VARCHAR(10) NULL ,
+`uptime_sec` VARCHAR(20) NULL ,
 `fqdn` VARCHAR(70) NULL ,
 `hostname` VARCHAR(70) NULL ,
 `nodename` VARCHAR(70) NULL ,
@@ -242,16 +288,24 @@ CREATE TABLE `servers` (
 `cpu_threads_per_core` VARCHAR(4) NULL ,
 `cpu_vcpus` VARCHAR(4) NULL ,
 `system_capabilities_enforced` VARCHAR(1) NULL ,
-`epoch` VARCHAR(10) NULL ,
+`epoch_time` VARCHAR(50) NULL ,
 `bios_ver` VARCHAR(20) NULL ,
 `bios_date` VARCHAR(20) NULL ,
-`boot_info` TEXT NULL ,
-`selinux_info` VARCHAR(255) NULL ,
+`boot_image` VARCHAR(255) NULL ,
+`selinux_status` VARCHAR(50) NULL ,
+`selinux_mode` VARCHAR(20) NULL ,
+`selinux_type` VARCHAR(20) NULL ,
 `service_mgr` VARCHAR(20) NULL ,
 `python_ver` VARCHAR(10) NULL ,
 `all_ipsv4` TEXT NULL ,
 `all_ipsv6` TEXT NULL ,
-`main_ip` TEXT NULL ,
+main_ip_address VARCHAR(20) NULL ,
+main_ip_netmask VARCHAR(20) NULL ,
+main_ip_gateway VARCHAR(20) NULL ,
+main_ip_interface VARCHAR(20) NULL ,
+main_ip_mac VARCHAR(20) NULL ,
+main_ip_network VARCHAR(20) NULL ,
+main_ip_type VARCHAR(20) NULL ,
 `domain` VARCHAR(100) NULL ,
 `dns_ns` VARCHAR(255) NULL ,
 `sys_cap` TEXT NULL ,

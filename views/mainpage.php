@@ -11,18 +11,20 @@ foreach($th as $th){
   }
 }
 /* print_r($thr); */
+sort($thr);
 foreach($thr as $t){
   $tname = str_replace('_',' ',$t);
   echo "<span id='tag-{$t}' class='badge bg-secondary'>{$tname}</span> ";
 }
 ?>
 
+<a href='/' class='btn btn-sm badge bg-danger'>Clear all</a>
   </div>
 </div>
 
 <script>
 var readhash = location.hash.split('|');
-console.log('rh',readhash);
+/* console.log('rh',readhash); */
 if(readhash.length > 0){
   readhash = removeA(readhash, '#');
   $.each(readhash, function( i, v ) {
@@ -46,7 +48,7 @@ $(document).on('click', '[id^="tag-"]',function(e){
   xx = removeA(xx, id);
 }
 xclean = [...new Set(xx)];
-console.log('xclean',xclean);
+/* console.log('xclean',xclean); */
 location.hash = xclean.join('|');
 updateTable();
 
@@ -102,23 +104,6 @@ foreach($_SESSION['tagsArr'] as $k=>$tag){
 ?> ]
     } );
     } );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </script>
