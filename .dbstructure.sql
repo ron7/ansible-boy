@@ -38,7 +38,7 @@ CREATE TABLE `servers` (
   `sys_vendor` varchar(60) DEFAULT NULL,
   `virt_type` varchar(60) DEFAULT NULL,
   `virt_role` varchar(60) DEFAULT NULL,
-  `uptime_sec` varchar(10) DEFAULT NULL,
+  `uptime_sec` varchar(20) DEFAULT NULL,
   `fqdn` varchar(70) DEFAULT NULL,
   `hostname` varchar(70) DEFAULT NULL,
   `nodename` varchar(70) DEFAULT NULL,
@@ -49,16 +49,24 @@ CREATE TABLE `servers` (
   `cpu_threads_per_core` varchar(4) DEFAULT NULL,
   `cpu_vcpus` varchar(4) DEFAULT NULL,
   `system_capabilities_enforced` varchar(1) DEFAULT NULL,
-  `epoch` varchar(10) DEFAULT NULL,
+  `epoch_time` varchar(50) DEFAULT NULL,
   `bios_ver` varchar(20) DEFAULT NULL,
   `bios_date` varchar(20) DEFAULT NULL,
-  `boot_info` text DEFAULT NULL,
-  `selinux_info` varchar(255) DEFAULT NULL,
+  `boot_image` varchar(255) DEFAULT NULL,
+  `selinux_status` varchar(50) DEFAULT NULL,
+  `selinux_mode` varchar(20) DEFAULT NULL,
+  `selinux_type` varchar(20) DEFAULT NULL,
   `service_mgr` varchar(20) DEFAULT NULL,
   `python_ver` varchar(10) DEFAULT NULL,
   `all_ipsv4` text DEFAULT NULL,
   `all_ipsv6` text DEFAULT NULL,
-  `main_ip` text DEFAULT NULL,
+  `main_ip_address` varchar(20) DEFAULT NULL,
+  `main_ip_netmask` varchar(20) DEFAULT NULL,
+  `main_ip_gateway` varchar(20) DEFAULT NULL,
+  `main_ip_interface` varchar(20) DEFAULT NULL,
+  `main_ip_mac` varchar(20) DEFAULT NULL,
+  `main_ip_network` varchar(20) DEFAULT NULL,
+  `main_ip_type` varchar(20) DEFAULT NULL,
   `domain` varchar(100) DEFAULT NULL,
   `dns_ns` varchar(255) DEFAULT NULL,
   `sys_cap` text DEFAULT NULL,
@@ -73,7 +81,7 @@ CREATE TABLE `servers` (
   `full` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,4 +115,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-27 21:20:25
+-- Dump completed on 2021-04-27 22:19:52
