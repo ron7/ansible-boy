@@ -10,7 +10,6 @@ foreach($th as $th){
     $thr[] = $th['Field'];
   }
 }
-/* print_r($thr); */
 sort($thr);
 foreach($thr as $t){
   $tname = str_replace('_',' ',$t);
@@ -23,16 +22,24 @@ foreach($thr as $t){
 </div>
 
 <script>
-var readhash = location.hash.split('|');
-/* console.log('rh',readhash); */
-if(readhash.length > 0){
-  readhash = removeA(readhash, '#');
-  $.each(readhash, function( i, v ) {
-    $('#tag-' + v).addClass('bg-primary').removeClass('bg-secondary');
+/* console.log('he'); */
+$(document).ready(function() {
+  var readhash = location.hash.split('|');
+  /* console.log('rh',readhash); */
+  if(readhash.length > 1){
+    readhash = removeA(readhash, '#');
+    $.each(readhash, function( i, v ) {
+      $('#tag-' + v).addClass('bg-primary').removeClass('bg-secondary');
 });
 }else{
   /* maybe set some default colums here */
+  var defaulthashes = ['fqdn','main_ip_address'];
+  $.each(defaulthashes, function( i, v ) {
+    $('#tag-' + v).addClass('bg-primary').removeClass('bg-secondary');
+  });
+location.hash = '#|' + defaulthashes.join('|');
 }
+});
 $(document).on('click', '[id^="tag-"]',function(e){
   let id = $(this).attr('id').split('-')[1];
   $(this).toggleClass('bg-secondary bg-primary');
@@ -52,14 +59,11 @@ xclean = [...new Set(xx)];
 location.hash = xclean.join('|');
 updateTable();
 
-//once hash is updated, save hash into local.storage
-
 
 });
 
 function updateTable(){
   var encData = encodeURIComponent(location.hash);
-  /* $.get("/api/?table=main&tags=" + encData); */
 
   $.post('/api/', {table:'main', tags: encData }, function(r){
     console.log(r);
@@ -123,7 +127,3 @@ foreach($_SESSION['tagsArr'] as $k=>$tag){
         </tfoot>
     </table>
 
-
-<?php
-
-//allServersTabe();
