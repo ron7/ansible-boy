@@ -38,7 +38,7 @@ if(strlen($_SESSION['username'])>2){
   Flight::route('*', function(){
   });
   if (empty($_SESSION['username'])) {
-    require ('login.php');
+    require ('views/login.php');
     exit;
   }
   foreach($_REQUEST as $k=>$v) $$k=$v; //to use $_REQUEST["example"] as $example
@@ -48,5 +48,5 @@ if(strlen($_SESSION['username'])>2){
   Flight::render('template', compact('u', 'webroot', 'baseUrl', 'sitename', 'my'));
   Flight::start();
 }else{
-  include_once('login.php');
+  include_once('views/login.php');
 }
