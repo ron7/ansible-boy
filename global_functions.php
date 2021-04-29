@@ -151,17 +151,19 @@ function langChange(){
 
 // Usage: mysql_magic($query [, $arg...]);
 function mql($q) {
-  global $db;
+  global $db,$debug;
   if (startsWith($q, 'delete') || startsWith($q, 'update') || startsWith($q, 'insert') || startsWith($q, 'replace')){
     if (!$myWrite){
       $myWrite = new mysqli($db['write']['DBHost'], $db['write']['DBUser'], $db['write']['DBPass'], $db['write']['DBName']);
       $myWrite->set_charset("utf8mb4");
     }
     $my = $myWrite;
-/* print_r($my); */
+    /* print_r($my); */
     $req_result = $my->query($q);
     if (!$req_result){
-      printf("mysqlError: %s\n", $myWrite->error);
+      if ($debug==1) {
+        printf("mysqlError: %s\nFOR Q: %s\n", $myWrite->error, $q);
+      }
       return false;
     }
   }else{
@@ -172,12 +174,14 @@ function mql($q) {
     $my = $myRead;
     $req_result = $my->query($q) or $my->error;
     if (!$req_result) {
-      /* printf("mysqlError: %s\n", $my->error); */
+      if ($debug==1) {
+        printf("mysqlError: %s\nFOR Q: %s\n", $myWrite->error, $q);
+      }
       return false;
     }
   }
 
-  if (startsWith($q, 'delete') || startsWith($q, 'update')){
+  if (startsWith($q, 'delete') || startsWith($q, 'update') || startsWith($q, 'create') || startsWith($q, 'drop')){
     return $my->affected_rows; // -1 || N
   } else if (startsWith($q, 'insert')){
     return $my->insert_id; // ID || 0 || FALSE
@@ -850,37 +854,6 @@ function domain($domainb) {
   return $url;
 }
 
-function isMobileDevice() {
-  $aMobileUA = array(
-    '/iphone/i' => 'iPhone',
-    '/ipod/i' => 'iPod',
-    '/ipad/i' => 'iPad',
-    '/android/i' => 'Android',
-    '/blackberry/i' => 'BlackBerry',
-    '/webos/i' => 'Mobile'
-  );
-
-  //Return true if Mobile User Agent is detected
-  $true = 0;
-  foreach ($aMobileUA as $sMobileKey => $sMobileOS) {
-    if (preg_match($sMobileKey, $_SERVER['HTTP_USER_AGENT'])) {
-      $true++;
-    }
-  }
-  if ($true === 0) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
-
-function setCron($cmd){
-  $c = shell_exec("crontab -l|grep -v '^#'|grep '^{$cmd}'");
-  if($c==''){
-    $cnew = shell_exec("(crontab -l 2>/dev/null ; echo '$cmd') | sort -u | crontab ");
-  }
-}
-
 function theDate($date) {
   if ((preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $date, $d)) or (preg_match("/^(\d{4})(\d{2})(\d{2})$/", $date, $d))) {
     $r['input'] = $d[0];
@@ -1019,43 +992,9 @@ function s() {
     'docroot' => $_SERVER["DOCUMENT_ROOT"],
     'approot' => $http."://".$_SERVER["SERVER_NAME"].$webroot,
     //'token' => bin2hex(openssl_random_pseudo_bytes(32)),
-    'isMobile' => isMobileDevice(),
     'cli' => is_cli(),
     'url' => url(),
   );
   return $s;
 }
 $s = s(); // get server global variables
-
-
-
-
-
-// SHOW all php defined functions + params
-
-/*
-$functions = get_defined_functions();
-$functions_list = array();
-foreach ($functions['user'] as $func) {
-  $f = new ReflectionFunction($func);
-  $args = array();
-  foreach ($f->getParameters() as $param) {
-    $tmparg = '';
-    if ($param->isPassedByReference()) $tmparg = '&';
-    if ($param->isOptional()) {
-      $tmparg = '[' . $tmparg . '$' . $param->getName() . ' = ' . $param->getDefaultValue() . ']';
-    } else {
-      $tmparg.= '&' . $param->getName();
-    }
-    $args[] = $tmparg;
-    unset ($tmparg);
-  }
-  $functions_list[] = 'function ' . $func . ' ( ' . implode(', ', $args) . ' )' ;
-}
-
-
-$vv = get_defined_vars();
-print_r($vv);
-
- */
-
