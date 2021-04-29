@@ -1,8 +1,8 @@
 -- MySQL dump 10.17  Distrib 10.3.25-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: ansible
+-- Host: 127.0.0.1    Database: ansibleboy
 -- ------------------------------------------------------
--- Server version	10.3.25-MariaDB-0ubuntu0.20.04.1
+-- Server version	10.5.9-MariaDB-1:10.5.9+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -74,14 +74,15 @@ CREATE TABLE `servers` (
   `memory_total` int(10) DEFAULT NULL,
   `memory_swap_free` int(10) DEFAULT NULL,
   `memory_swap_total` int(10) DEFAULT NULL,
-  `devices` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `mounts` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `lvm` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `devices` text DEFAULT NULL,
+  `mounts` text DEFAULT NULL,
+  `lvm` text DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT current_timestamp(),
-  `full` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `state` text DEFAULT NULL,
+  `full` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`full`)),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,4 +116,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-27 22:19:52
+-- Dump completed on 2021-04-29 18:09:01
