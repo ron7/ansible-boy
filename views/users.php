@@ -21,12 +21,12 @@ if(in_array($u[1],array('add','edit'))){
 ?>
     <section class="content-header">
       <h3>
-<a class='btn btn-sm btn-secondary' href='<?php echo $s['approot'].'/'.$u0.'/'; ?>'><span class="material-icons">arrow_back</span></a> <?php
-  if($u[1]==='add'){
-    echo L(ucfirst($u0)).' '.L('add');
-  }elseif($u[1]==='edit'){
-    echo L(ucfirst($u0)).' '.L('edit');
-  }
+      <a class='btn btn-sm btn-secondary' href='<?php echo $s['approot'].'/'.$u0.'/'; ?>'><span class="material-icons">arrow_back</span></a> <?php
+      if($u[1]==='add'){
+        echo L(ucfirst($u0)).' '.L('add');
+      }elseif($u[1]==='edit'){
+        echo L(ucfirst($u0)).' '.L('edit');
+      }
 
 ?>
       </h3>
@@ -70,6 +70,7 @@ if(in_array($u[1],array('add','edit'))){
 ?>
 
 
+<button class="btn btn-danger mb-3" id="resetDbTableServers">Reset DB Table Servers (this will drop al lthe data)</button>
 
                 <section class="content-header">
                         <h3>
@@ -99,6 +100,7 @@ person_add
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
+
 <?php
   $loop = mql("select * from $u0");
   if(!empty($loop)){
@@ -146,6 +148,10 @@ delete
     if(id !== 'undefined'){
       $.post("<?php echo $_SERVER['REQUEST_URI']; ?>", { action: "delete",id: id }).done(function(data){$('.line_<?php echo $u[0]; ?>_' + id).hide('fast', function(){ $('.line_<?php echo $u[0]; ?>_' + id).remove(); });});
 }
+});
+
+$('#resetDbTableServers').on('click',function(){
+  $.post("/api/", { action: "resetDbTableServers" });
 });
 </script>
 <?php

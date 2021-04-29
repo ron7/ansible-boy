@@ -1,4 +1,8 @@
 <?php
+if($_POST['action']=== 'resetDbTableServers'){
+resetDbTableServers();
+die();
+}
 if(($_POST['table']=='main') and (!empty($_POST['tags']))){
   $tags = array_filter(explode("|",clean(urldecode($_POST['tags']),'\|\_')));
   $_SESSION['tagsArr'] = $tags;
