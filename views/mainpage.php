@@ -15,6 +15,9 @@ foreach($thr as $t){
   $tname = str_replace('_',' ',$t);
   echo "<span id='tag-{$t}' class='badge bg-secondary'>{$tname}</span> ";
 }
+if(!isset($_SESSION['tagsArr'])){
+  $_SESSION['tagsArr'] = $defaulthashes;
+}
 ?>
 
 <a href='/' class='btn btn-sm badge bg-danger'>Clear all</a>
