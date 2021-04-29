@@ -11,7 +11,7 @@ if($u[0]=='logout'){
 
 $h = getallheaders();
 if(in_array($h['Token'],$tokens)){
-$_SESSION['username'] = 'api';
+  $_SESSION['username'] = 'api';
 }
 
 /* if($u[0]==''){ */
@@ -45,7 +45,7 @@ if(strlen($_SESSION['username'])>2){
 
 
   /* Flight::render('/template', array('u' => $u, 'webroot' => $webroot, 'baseUrl'=> $baseUrl, 'sitename' => $sitename, 'apiPullKey' => $apiPullKey, 'archiveBase' => $archiveBase, 'my' => $my, )); */
-  Flight::render('template', compact('u', 'webroot', 'baseUrl', 'sitename', 'my'));
+  Flight::render('template', compact('u', 'webroot', 'baseUrl', 'sitename', 'my', 'defaulthashes'));
   Flight::start();
 }else{
   include_once('views/login.php');

@@ -33,9 +33,12 @@ $(document).ready(function() {
 });
 }else{
   /* maybe set some default colums here */
-  var defaulthashes = ['fqdn','main_ip_address'];
-  $.each(defaulthashes, function( i, v ) {
-    $('#tag-' + v).addClass('bg-primary').removeClass('bg-secondary');
+<?php
+echo "var defaulthashes = ['".implode("','",$defaulthashes)."'];";
+//$_SESSION['tagsArr'] = $defaulthashes;
+?>
+$.each(defaulthashes, function( i, v ) {
+  $('#tag-' + v).addClass('bg-primary').removeClass('bg-secondary');
   });
 location.hash = '#|' + defaulthashes.join('|');
 }

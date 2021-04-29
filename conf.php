@@ -10,6 +10,8 @@ $debug=0;
 $debugIps= array('127.0.0.1');
 $sitename = 'X'; //default, overwritten by .env
 
+$defaulthashes = array('fqdn','main_ip_address','main_ip_gateway');
+
 $tokens = array(
   'tokenLKDJHFYUUHIEUIEJOIJOIJDDOJSHDK'
 );
