@@ -1,14 +1,25 @@
 #!/bin/bash
-set -x
+# set -x
 pwd=$(dirname $0)
-echo $pwd
+# echo $pwd
 inventory=$(grep '^ansibleInventory' $pwd/.env|cut -d= -f2)
 ansibleConfig=$(grep '^ansibleConfig' $pwd/.env|cut -d= -f2)
+if $(env|grep ANSIBLEBOY_INVENTORY > /dev/null);then
+  inventory=$(env|grep ANSIBLEBOY_INVENTORY|cut -d= -f2)
+fi
+
+if $(env|grep ANSIBLEBOY_CFG > /dev/null);then
+  ansibleConfig=$(env|grep ANSIBLEBOY_CFG|cut -d= -f2)
+fi
+
+echo using inventory: $inventory
+echo using cfg: $ansibleConfig
 if [ ! -z "$inventory" ];then
+  mkdir -p $pwd/.facts/
   if [ ! -z "$ansibleConfig" ];then
-    ANSIBLE_CONFIG="$ansibleConfig" ansible all -m setup --tree $pwd/facts/ -i "$inventory" >/dev/null 2>&1
+    ANSIBLE_CONFIG="$ansibleConfig" ansible all -m setup --tree $pwd/.facts/ -i "$inventory" >/dev/null 2>&1
   else
-    ansible all -m setup --tree $pwd/facts/ -i "$inventory" >/dev/null 2>&1
+    ansible all -m setup --tree $pwd/.facts/ -i "$inventory" >/dev/null 2>&1
   fi
 fi
 php $pwd/.post_cron_processor.php
