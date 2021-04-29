@@ -323,11 +323,12 @@ ts = NOW()
       /* $rDomain = array('','xron.net'); */
       /* $rDom = array_rand($rDomain, 1); */
       /* $rD=$rDomain[$rDom]; */
+      /* $rIp = '10.200.'.rand(1,250).'.'.rand(1,250); */
 
       /* $rHost = generateRandomString(); */
       /* $rFqdn = "{$rHost}.xron.net"; */
 
-      /* $q = "update servers set domain='$rD',hostname='host-$rHost',nodename='host-$rHost',fqdn='$rFqdn' where uuid='$uuid'"; */
+      /* $q = "update servers set domain='$rD',main_ip_address='$rIp',hostname='host-$rHost',nodename='host-$rHost',fqdn='$rFqdn' where uuid='$uuid'"; */
       /* echo "\n\n$q\n\n"; */
       /* mql($q); */
 
