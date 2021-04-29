@@ -6,20 +6,20 @@ date_default_timezone_set('Europe/Sofia');
 setlocale(LC_ALL, 'bg_BG');
 
 $minify_html=0;
-$debug=1;
+$debug=0;
 $debugIps= array('127.0.0.1');
 $sitename = 'X'; //default, overwritten by .env
 
 $tokens = array(
-'tokenLKDJHFYUUHIEUIEJOIJOIJDDOJSHDK'
+  'tokenLKDJHFYUUHIEUIEJOIJOIJDDOJSHDK'
 );
 
 //can I utilize these in a good way?
 
 $app['site_name'] = $sitename; // but overwritable via env ?
-  $app['site_title'] = $app['site_name'];
-  $app['site_description'] = 'Next great thing';
-  $app['site_keywords'] = '';
+$app['site_title'] = $app['site_name'];
+$app['site_description'] = 'Next great thing';
+$app['site_keywords'] = '';
 
 //echo genPass('admin')."\n\n";
 
@@ -89,9 +89,9 @@ function allServersTabe(){
     /* $ignoredHeaders */
     array(
       'id',
-'sys_cap',
-'devices',
-'mounts',
+      'sys_cap',
+      'devices',
+      'mounts',
       'full',
     ),
 
@@ -104,4 +104,71 @@ function allServersTabe(){
     array(
     )
   );
+}
+
+function resetDbTableServers(){
+  $q = "drop table if exists servers;";
+  @mql($q);
+  $q = "
+CREATE TABLE `servers` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`uuid` VARCHAR(40) NOT NULL ,
+`os_family` VARCHAR(20) NULL ,
+`distro` VARCHAR(40) NULL ,
+`distro_release` VARCHAR(40) NULL ,
+`distro_mver` INT(5) NULL ,
+`distro_ver` VARCHAR(10) NULL ,
+`kernel` VARCHAR(255) NULL ,
+`product_name` VARCHAR(100) NULL ,
+`product_serial` VARCHAR(100) NULL ,
+`product_ver` VARCHAR(30) NULL ,
+`arch` VARCHAR(10) NULL ,
+`sys_vendor` VARCHAR(60) NULL ,
+`virt_type` VARCHAR(60) NULL ,
+`virt_role` VARCHAR(60) NULL ,
+`uptime_sec` VARCHAR(20) NULL ,
+`fqdn` VARCHAR(70) NULL ,
+`hostname` VARCHAR(70) NULL ,
+`nodename` VARCHAR(70) NULL ,
+`is_chroot` VARCHAR(10) NULL ,
+`iscsi_iqn` VARCHAR(100) NULL ,
+`cpu_cores` VARCHAR(4) NULL ,
+`cpu_count` VARCHAR(4) NULL ,
+`cpu_threads_per_core` VARCHAR(4) NULL ,
+`cpu_vcpus` VARCHAR(4) NULL ,
+`system_capabilities_enforced` VARCHAR(1) NULL ,
+`epoch_time` VARCHAR(50) NULL ,
+`bios_ver` VARCHAR(20) NULL ,
+`bios_date` VARCHAR(20) NULL ,
+`boot_image` VARCHAR(255) NULL ,
+`selinux_status` VARCHAR(50) NULL ,
+`selinux_mode` VARCHAR(20) NULL ,
+`selinux_type` VARCHAR(20) NULL ,
+`service_mgr` VARCHAR(20) NULL ,
+`python_ver` VARCHAR(10) NULL ,
+`all_ipsv4` TEXT NULL ,
+`all_ipsv6` TEXT NULL ,
+main_ip_address VARCHAR(20) NULL ,
+main_ip_netmask VARCHAR(20) NULL ,
+main_ip_gateway VARCHAR(20) NULL ,
+main_ip_interface VARCHAR(20) NULL ,
+main_ip_mac VARCHAR(20) NULL ,
+main_ip_network VARCHAR(20) NULL ,
+main_ip_type VARCHAR(20) NULL ,
+`domain` VARCHAR(100) NULL ,
+`dns_ns` VARCHAR(255) NULL ,
+`sys_cap` TEXT NULL ,
+`memory_free` INT(10) NULL ,
+`memory_total` INT(10) NULL ,
+`memory_swap_free` INT(10) NULL ,
+`memory_swap_total` INT(10) NULL ,
+`devices` TEXT NULL ,
+`mounts` TEXT NULL ,
+`lvm` TEXT NULL ,
+`ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+`state` TEXT NULL ,
+`full` JSON NULL ,
+PRIMARY KEY (`id`), UNIQUE KEY `uuid` (`uuid`)) ENGINE = InnoDB;
+";
+  @mql($q);
 }
