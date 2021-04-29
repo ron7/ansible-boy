@@ -158,6 +158,7 @@ function mql($q) {
       $myWrite->set_charset("utf8mb4");
     }
     $my = $myWrite;
+/* print_r($my); */
     $req_result = $my->query($q);
     if (!$req_result){
       printf("mysqlError: %s\n", $myWrite->error);
@@ -704,7 +705,7 @@ function sanitizeData($q) {
 }
 
 
-function generateRandomString($chars='#@^%*',$length = 10) {
+function generateRandomString($chars='',$length = 10) {
   $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$chars";
   $charactersLength = strlen($characters);
   $randomString = '';
