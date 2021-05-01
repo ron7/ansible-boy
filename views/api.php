@@ -1,7 +1,11 @@
 <?php
+if(($_GET['download']== 'csv') && ($_GET['data']<> '')){
+  dldCsv($_GET['data']);
+  die();
+}
 if($_POST['action']=== 'resetDbTableServers'){
-resetDbTableServers();
-die();
+  resetDbTableServers();
+  die();
 }
 if(($_POST['table']=='main') and (!empty($_POST['tags']))){
   $tags = array_filter(explode("|",clean(urldecode($_POST['tags']),'\|\_')));

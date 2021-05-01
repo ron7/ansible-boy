@@ -21,6 +21,7 @@ if(!isset($_SESSION['tagsArr'])){
 ?>
 
 <a href='/' class='btn btn-sm badge bg-danger'>Clear all</a>
+<button class='btn btn-sm badge bg-success' id="dldCsv">Download csv</button>
   </div>
 </div>
 
@@ -115,7 +116,13 @@ foreach($_SESSION['tagsArr'] as $k=>$tag){
     } );
     } );
 
-
+$(document).on('click','#dldCsv',function(){
+  var readhash = location.hash.split('|');
+  if(readhash.length > 1){
+    readhash = removeA(readhash, '#');
+}
+window.location = '/api/&download=csv&data=' + readhash.join('|');
+})
 </script>
 
 

@@ -174,3 +174,34 @@ PRIMARY KEY (`id`), UNIQUE KEY `uuid` (`uuid`)) ENGINE = InnoDB;
 ";
   @mql($q);
 }
+
+function dldCsv($data){
+  error_reporting(1);
+  $data = explode('|',$data);
+  $headers = array();
+  foreach($data as $header){
+    $headers[] = ucfirst(str_replace('_',' ',$header));
+  }
+  $qs = implode(',', $data);
+
+  $q = "select $qs from servers";
+  $r = mql($q);
+  $rfull = array_merge(array($headers),$r);
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/csv');
+  header('Content-Disposition: attachment; filename=ansibleBoy-report.csv');
+  header('Content-Transfer-Encoding: binary');
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+  header('Pragma: public');
+
+  $f = fopen('php://memory', 'w');
+  foreach ($rfull as $line) {
+    // generate csv lines from the inner arrays
+    fputcsv($f, $line, "\t");
+  }
+  // reset the file pointer to the start of the file
+  fseek($f, 0);
+  fpassthru($f);
+
+}
