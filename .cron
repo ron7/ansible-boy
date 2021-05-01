@@ -16,6 +16,7 @@ echo using inventory: $inventory
 echo using cfg: $ansibleConfig
 if [ ! -z "$inventory" ];then
   mkdir -p $pwd/.facts/
+  rm -rf $pwd/.factcache
   if [ ! -z "$ansibleConfig" ];then
     ANSIBLE_CONFIG="$ansibleConfig" ansible all -m setup --tree $pwd/.facts/ -i "$inventory" >/dev/null 2>&1
   else
