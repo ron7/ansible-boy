@@ -10,7 +10,7 @@
     <meta name="Keywords" content="<?php if (count($app['site_keywords'])<1) {
     echo deseo($app['site_name']);
     } else {
-    echo $app['site_keywords'];
+      echo $app['site_keywords'];
     } ?>">
 
     <meta property='og:type' content='website' />
@@ -71,7 +71,6 @@ a{text-decoration:none;}
 
           <ul class="navbar-nav d-flex ml-2 order-3 pr-3">
             <li class="nav-item"> <a class="nav-link <?php if($u[0]==='users'){ echo 'active';}?>" aria-current="page" href="/users">Users</a> </li>
-            <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="/logout" title='Logout' data-bs-toggle="tooltip" data-bs-placement="left"><i class="material-icons md-18">exit_to_app</i></a></li>
           </ul>
 
@@ -83,6 +82,6 @@ a{text-decoration:none;}
     <div class="container-fluid">
       <br>
       <br>
-      <?php
-        sessionFlashShow();
-        ?>
+<?php
+      sessionFlashShow();
+?>
