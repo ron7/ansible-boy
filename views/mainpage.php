@@ -73,12 +73,21 @@ function updateTable(){
   var encData = encodeURIComponent(location.hash);
 
   $.post('/api/', {table:'main', tags: encData }, function(r){
-    console.log(r);
+    /* console.log(r); */
 
     /* var datatable = $('#maintable').DataTable(); */
-    /*     datatable.clear(); */
-    /*     datatable.rows.add(r.data); */
-    /*     datatable.draw(); */
+    /*     /1* datatable.clear(); *1/ */
+    /*     /1* datatable.rows.add(r.data); *1/ */
+    /*     /1* datatable.draw(); *1/ */
+
+    /*     datatable.destroy(); */
+    /*     $('#maintable').empty(); // empty in case the columns change */
+
+    /*     datatable = $('#maintable').DataTable( { */
+    /*         columns: r.columns, */
+    /*         data:    r.data */
+    /*     } ); */
+
 
     location.reload();
 
@@ -114,6 +123,14 @@ foreach($_SESSION['tagsArr'] as $k=>$tag){
 }
 ?> ]
     } );
+
+$('#maintable').DataTable().on( 'draw', function (e,v) {
+  if((v.json.count !== 'undefine') && (parseInt(v.json.count) > 0)){
+    let count = parseInt(v.json.count);
+    $('.servers_count').text(count);
+}
+} );
+
     } );
 
 $(document).on('click','#dldCsv',function(){

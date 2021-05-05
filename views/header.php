@@ -62,7 +62,7 @@ a{text-decoration:none;}
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"> <a class="nav-link <?php if($u[0]===''){ echo 'active';}?>" aria-current="page" href="/">Dashboard</a> </li>
+            <li class="nav-item"> <a class="nav-link <?php if($u[0]===''){ echo 'active';}?>" aria-current="page" href="/">Dashboard <span class="badge bg-danger servers_count"></span></a> </li>
           </ul>
 
 
