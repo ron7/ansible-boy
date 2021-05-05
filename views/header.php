@@ -25,11 +25,14 @@
 
     <!-- <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script> -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
 
     <script type="text/javascript" src="<?php echo $webroot; ?>/assets/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo $webroot; ?>/assets/jquery.dataTables.min.js"></script>
 
     <style>
+body{font-family: "Play", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"}
 li.nav-item > a.nav-link{ text-transform:capitalize; }
 .material-icons{ vertical-align:middle; line-height:0; }
 body > .navbar-default{ position: fixed; width: 100vw; top: 0; z-index:10000; }
