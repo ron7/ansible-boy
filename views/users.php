@@ -70,7 +70,7 @@ if(in_array($u[1],array('add','edit'))){
 ?>
 
 
-<button class="btn btn-danger mb-3" id="resetDbTableServers">Reset DB Table Servers (this will drop al lthe data)</button>
+<button class="btn btn-danger mb-3" id="resetDbTableServers">Reset DB Table Servers (this will drop all the data)</button>
 
                 <section class="content-header">
                         <h3>
