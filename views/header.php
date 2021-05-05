@@ -44,10 +44,10 @@ textarea{ padding:6px 8px;}
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
-.table td, .table th{ font-size:0.9rem; }
-table.dataTable, table.dataTable th, table.dataTable td{
-font-size:0.9rem;
-}
+.table td, .table th{ font-size:0.9rem; } table.dataTable, table.dataTable th, table.dataTable td{ font-size:0.9rem; }
+.atr{ font-weight:bold; }
+.host_details span{ font-weight:normal; word-break: break-all; }
+a{text-decoration:none;}
     </style>
 
   </head>

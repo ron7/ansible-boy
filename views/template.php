@@ -9,7 +9,9 @@ if (empty($_SESSION['username'])) { // NOT loggedin
 }else{
   include('header.php');
   $page = "./".$baseUrl."/".clean($u[0],"\_\.\-").".php";
-  if(($u[0]<>"") AND (file_exists($page))){
+  if(($u[0]==='host') && ($u['1']<>'')){
+    include('_hostview.php');
+  }elseif(($u[0]<>"") AND (file_exists($page))){
     include($page);
   }else{
     include('mainpage.php');
