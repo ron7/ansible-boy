@@ -16,8 +16,6 @@ $tokens = array(
   'tokenLKDJHFYUUHIEUIEJOIJOIJDDOJSHDK'
 );
 
-//can I utilize these in a good way?
-
 $app['site_name'] = $sitename; // but overwritable via env ?
 $app['site_title'] = $app['site_name'];
 $app['site_description'] = 'Next great thing';
