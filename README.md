@@ -3,7 +3,7 @@
 About
 -----
 
-AnsibleBoy aims to use the Asnible `facts` as data, which can then be visualized as a table
+AnsibleBoy aims to use the Ansible `facts` as data, which can then be visualized as a table
 
 ![](/assets/ansibleBoyScreen1.png?raw=true "Screenshot")
 
