@@ -32,6 +32,7 @@ How to install
 This is a straight forward PHP setup, so clone the repo directly in a `web` folder.
 Setup `.env` file from the example `.example.env` one
 Create a Database with a user.
+Import the `.db_users_init` into the DB, which will create the `users` table, and add the initial `admin` user. TODO: this should be automated in the code, and not be a manual step.
 Login to `/admin` with user: `admin` and pass `admin`. Make sure to change these.
 Once in the Users menu, click the red button to `Reset DB Table Servers`, which recreates the table every time. So be careful with it.
 
